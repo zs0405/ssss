@@ -1,7 +1,9 @@
 //引入
 var gulp = require("gulp");
+console.log(gulp)
 var gulpSass = require("gulp-sass");
 var gulpServer = require("gulp-webserver");
+var gulpUglify = require("gulp-uglify");
 var url = require("url");
 var path = require("path");
 var fs = require("fs");
@@ -9,11 +11,18 @@ var bodyparser = require("body-parser");
 var data = require("./src/js/data.json");
 //编译sass
 gulp.task("sass", function() {
-    gulp.src("./src/scss/*.scss").pipe(gulpSass()).pipe(gulp.dest("./src/css/"));
+    return gulp.src("./src/scss/style.scss")
+        .pipe(gulpSass())
+        .pipe(gulp.dest("./src/css/"));
 });
+//监听变化
+gulp.task("change", function() {
+    gulp.watch("./src/scss/style.scss", gulp.series("sass"));
+});
+
 //起服务
 gulp.task("server", function() {
-    gulp.src("./src").pipe(gulpServer({
+    return gulp.src("src").pipe(gulpServer({
         port: 8585,
         host: 'localhost',
         liverload: true, //监听
@@ -38,6 +47,15 @@ gulp.task("server", function() {
                         pass: pass1
                     });
                     res.end(JSON.stringify({ code: 1, masagge: "注册成功" }));
+                } else if (pathname === "/api/login") {
+                    var user1 = req.body.user;
+                    var pass1 = req.body.pass;
+                    for (var i in data) {
+                        if (data[i].user === user1 && data[i].pass === pass1) {
+                            res.end(JSON.stringify({ code: 1, masagge: "登录成功" }));
+                        }
+                    }
+                    res.end(JSON.stringify({ code: 0, masagge: "用户名或密码不正确" }));
                 }
             } else {
                 pathname = pathname === "/" ? "index.html" : pathname;
@@ -47,3 +65,10 @@ gulp.task("server", function() {
         }]
     }));
 });
+//压缩
+gulp.task("uglify", function() {
+    return gulp.src("./src/js/*.js")
+        .pipe(gulpUglify())
+        .pipe(gulp.dest("./src/dist/"));
+});
+gulp.task("default", gulp.series("sass", "server", "uglify", "change"));

@@ -1,9 +1,12 @@
 * {
   padding: 0;
   margin: 0;
-  list-style: none;
-  background: #fcc; }
+  list-style: none; }
 
-input {
-  background: #fff;
-  border: 1px solid #ccc; }
+html,
+body {
+  background: #fcc; }
+  html input,
+  body input {
+    background: #fff;
+    border: 1px solid #f00; }

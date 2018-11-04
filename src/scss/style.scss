@@ -2,10 +2,13 @@
     padding: 0;
     margin: 0;
     list-style: none;
-    background: #fcc;
 }
 
-input {
-    background: #fff;
-    border: 1px solid #ccc;
+html,
+body {
+    background: #fcc;
+    input {
+        background: #fff;
+        border: 1px solid #f00;
+    }
 }
