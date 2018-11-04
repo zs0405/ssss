@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/ajax.js"></script>
+</head>
+
+<body>
+    <!-- I like pink ,but I like you better -->
+    <input type="text" class="text">
+    <input type="password" class="password">
+    <input type="button" class="btn" value="注册">
+</body>
+<script>
+    var user = document.querySelector(".text");
+    var password = document.querySelector(".password");
+    var btn = document.querySelector(".btn");
+    btn.onclick = function() {
+        var userVal = user.value;
+        var passVal = password.value;
+        ajax({
+            url: "/api/register",
+            type: "post",
+            data: {
+                user: userVal,
+                pass: passVal
+            },
+            success: function(data) {
+                if (data.code === 1) {
+                    location.href = "login.html";
+                }
+
+            }
+        });
+    }
+</script>
+
+</html>
